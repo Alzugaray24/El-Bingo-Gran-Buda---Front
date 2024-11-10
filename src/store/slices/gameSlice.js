@@ -1,38 +1,30 @@
-// src/store/slices/gameSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  board: [], // Aquí podrías agregar la lógica de tu tablero de Bingo
-  calledNumbers: [],
-  isGameActive: false,
+  games: [], // Lista de juegos activos
+  currentGame: null, // Juego actual
 };
 
 const gameSlice = createSlice({
   name: "game",
   initialState,
   reducers: {
-    startGame: (state) => {
-      state.isGameActive = true;
-      state.board = generateBoard(); // Esta función debería generar el tablero de bingo
+    setGames: (state, action) => {
+      state.games = action.payload; // Establece la lista de juegos
     },
-    stopGame: (state) => {
-      state.isGameActive = false;
-      state.board = [];
-      state.calledNumbers = [];
+    setCurrentGame: (state, action) => {
+      state.currentGame = action.payload; // Establece el juego actual
     },
-    callNumber: (state, action) => {
-      state.calledNumbers.push(action.payload);
+    resetGames: (state) => {
+      state.games = []; // Reinicia la lista de juegos a un arreglo vacío
+    },
+    addGame: (state, action) => {
+      console.log("added");
+      state.games.push(action.payload); // Agrega un nuevo juego a la lista
     },
   },
 });
 
-export const { startGame, stopGame, callNumber } = gameSlice.actions;
-
+export const { setGames, setCurrentGame, resetGames, addGame } =
+  gameSlice.actions;
 export default gameSlice.reducer;
-
-function generateBoard() {
-  // Lógica para generar el tablero de bingo
-  return Array(25)
-    .fill(null)
-    .map(() => Math.floor(Math.random() * 75) + 1);
-}

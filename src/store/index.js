@@ -1,13 +1,28 @@
 // src/store/index.js
 import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import gameReducer from "./slices/gameSlice";
-import authReducer from "./slices/authSlice"; // Asegúrate de importar authSlice
+import authReducer from "./slices/authSlice";
+
+const gamePersistConfig = {
+  key: "game",
+  storage,
+};
+
+const authPersistConfig = {
+  key: "auth",
+  storage,
+};
 
 const store = configureStore({
   reducer: {
-    game: gameReducer,
-    auth: authReducer,
+    game: persistReducer(gamePersistConfig, gameReducer),
+    auth: persistReducer(authPersistConfig, authReducer),
   },
 });
 
-export default store;
+const persistor = persistStore(store);
+
+export { persistor }; // Exporta el persistor si lo necesitas
+export default store; // Exportación predeterminada
