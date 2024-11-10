@@ -12,9 +12,6 @@ const gameSlice = createSlice({
     setGames: (state, action) => {
       state.games = action.payload;
     },
-    setCurrentGame: (state, action) => {
-      state.currentGame = action.payload;
-    },
     resetGames: (state) => {
       state.games = [];
     },
@@ -22,9 +19,13 @@ const gameSlice = createSlice({
       console.log("added");
       state.games.push(action.payload);
     },
+    setCurrentGame: (state, action) => {
+      state.currentGame = action.payload;
+    },
   },
 });
 
-export const { setGames, setCurrentGame, resetGames, addGame } =
+export const { setGames, setCurrentGame, resetGames, addGame, setGameStatus } =
   gameSlice.actions;
+
 export default gameSlice.reducer;

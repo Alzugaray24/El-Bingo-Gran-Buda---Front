@@ -64,6 +64,10 @@ const Home = () => {
                         variant="contained"
                         color="primary"
                         onClick={() => handleJoinGame(game._id)}
+                        disabled={
+                          game.gameStatus === "en curso" ||
+                          game.gameStatus === "finalizado"
+                        }
                       >
                         Unirme al Juego
                       </Button>

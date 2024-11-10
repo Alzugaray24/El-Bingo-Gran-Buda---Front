@@ -13,15 +13,13 @@ function App() {
   return (
     <Router>
       <CssBaseline />{" "}
-      {/* Este componente restablece los estilos predeterminados del navegador */}
-      {/* Flexbox para centrar el contenido */}
       <Box
         display="flex"
         justifyContent="center"
         alignItems="center"
         height="100vh"
       >
-        <Container maxWidth="sm">
+        <Container maxWidth="m">
           <Routes>
             {/* Ruta para la página de login */}
             <Route path="/login" element={<LoginPage />} />
