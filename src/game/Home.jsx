@@ -12,27 +12,24 @@ import { useSockets } from "../hooks/useSocket";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { getGames, joinGame, createGame } = useSockets(); // Añadimos createGame aquí
+  const { getGames, joinGame, createGame } = useSockets();
   const games = useSelector((state) => state.game.games);
-  const userId = useSelector((state) => state.auth.userId); // Asegúrate de que el userId está disponible
+  const userId = useSelector((state) => state.auth.userId);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getGames(); // Cargar los juegos activos cuando el componente se monte
+    getGames();
   }, [getGames]);
 
   const handleJoinGame = async (gameId) => {
-    const success = await joinGame(gameId, userId); // Unirse al juego
-    console.log(success);
+    const success = await joinGame(gameId, userId);
     if (success) {
-      console.log("entre");
-      // Si el jugador se unió correctamente, redirigimos a la pantalla de detalles del juego
       navigate(`/game/${gameId}`);
     }
   };
 
   const handleCreateGame = () => {
-    createGame(); // Crear un nuevo juego
+    createGame();
   };
 
   return (
@@ -41,7 +38,6 @@ const Home = () => {
         Juegos Activos
       </Typography>
 
-      {/* Botón para crear un nuevo juego */}
       <Button
         variant="contained"
         color="secondary"
@@ -67,7 +63,7 @@ const Home = () => {
                         fullWidth
                         variant="contained"
                         color="primary"
-                        onClick={() => handleJoinGame(game._id)} // Llama a la función para unirse al juego
+                        onClick={() => handleJoinGame(game._id)}
                       >
                         Unirme al Juego
                       </Button>

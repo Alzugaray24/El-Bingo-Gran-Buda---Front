@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  games: [], // Lista de juegos activos
-  currentGame: null, // Juego actual
+  games: [],
+  currentGame: null,
 };
 
 const gameSlice = createSlice({
@@ -10,17 +10,17 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     setGames: (state, action) => {
-      state.games = action.payload; // Establece la lista de juegos
+      state.games = action.payload;
     },
     setCurrentGame: (state, action) => {
-      state.currentGame = action.payload; // Establece el juego actual
+      state.currentGame = action.payload;
     },
     resetGames: (state) => {
-      state.games = []; // Reinicia la lista de juegos a un arreglo vacío
+      state.games = [];
     },
     addGame: (state, action) => {
       console.log("added");
-      state.games.push(action.payload); // Agrega un nuevo juego a la lista
+      state.games.push(action.payload);
     },
   },
 });
