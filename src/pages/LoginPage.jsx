@@ -37,14 +37,14 @@ const LoginPage = () => {
   return (
     <div>
       <LoginForm onLogin={handleLogin} error={error} />
-      <Button
+      {/* <Button
         variant="outlined"
         size="small"
         onClick={handleResetGames}
         style={{ marginTop: "10px" }}
       >
         Reset Juegos
-      </Button>
+      </Button> */}
     </div>
   );
 };

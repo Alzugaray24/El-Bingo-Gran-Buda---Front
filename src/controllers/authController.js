@@ -9,7 +9,7 @@ const authController = {
 
       return { token, user, userId };
     } catch (error) {
-      throw new Error("Credenciales incorrectas");
+      throw new Error(error.response.data.message);
     }
   },
 
@@ -18,7 +18,7 @@ const authController = {
       const { token, user } = await register(email, fullName, password);
       return { token, user };
     } catch (error) {
-      throw new Error("Hubo un error en el registro. Intenta de nuevo.");
+      throw new Error(error.response.data.message);
     }
   },
 };

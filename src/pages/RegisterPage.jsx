@@ -13,7 +13,7 @@ const RegisterPage = () => {
 
   const handleRegister = async (email, fullName, password) => {
     try {
-      await authController.register(email, fullName, password);
+      await authController.register(email, fullName, password); // Ahora se pasa fullName
       navigate("/login");
     } catch (err) {
       setError(err.message);

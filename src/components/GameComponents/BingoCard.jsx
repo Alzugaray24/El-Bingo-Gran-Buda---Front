@@ -1,40 +1,80 @@
-import React from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  Button,
+  Grid,
+  Typography,
+  Snackbar,
+  Alert,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from "@mui/material";
 import { useSockets } from "../../hooks/useSocket";
+import { useNavigate } from "react-router-dom";
 
 const BingoCard = ({ player, gameId, userId }) => {
   const { card, markedBalls } = player;
-  const { markBall, checkWinCondition } = useSockets(); // Traemos la función checkWinCondition
+  const { markBall, checkWinCondition, endGame } = useSockets();
+  const navigate = useNavigate();
 
-  // Función para determinar si un número está marcado
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
+
   const isBallMarked = (number) => markedBalls.includes(number);
 
-  // Función para marcar una bola
   const handleMarkBall = (number) => {
     if (!isBallMarked(number)) {
-      markBall(gameId, userId, number) // Llamada a la función markBall del hook
+      markBall(gameId, userId, number)
         .then(() => {
           console.log(`Bola ${number} marcada exitosamente.`);
         })
         .catch((error) => {
-          console.error("Error al marcar la bola:", error);
+          setErrorMessage(error);
+          setOpenSnackbar(true);
         });
     }
   };
 
-  // Función para manejar la verificación de BINGO
   const handleBingo = () => {
-    checkWinCondition(gameId, userId) // Llamada a la función checkWinCondition para verificar si el jugador ha ganado
+    checkWinCondition(gameId, userId)
       .then((result) => {
-        if (result) {
-          alert("¡Felicidades! Has ganado el Bingo.");
+        if (result.winner) {
+          setDialogMessage("¡Felicidades! Has ganado el Bingo.");
+          setOpenDialog(true);
+
+          endGame(gameId)
+            .then(() => {
+              console.log("aca perro");
+              navigate("/home");
+            })
+            .catch((error) => {
+              console.error("Error al finalizar el juego:", error);
+            });
         } else {
-          alert("Lo siento, aún no has ganado. Sigue jugando.");
+          setDialogMessage(
+            "Lo siento, no cumples con las reglas del juego. Descalificado."
+          );
+          setOpenDialog(true);
+          setTimeout(() => {
+            navigate("/home");
+          }, 3000);
         }
       })
       .catch((error) => {
         console.error("Error al verificar el Bingo:", error);
       });
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
   };
 
   return (
@@ -63,15 +103,15 @@ const BingoCard = ({ player, gameId, userId }) => {
                       ? "green"
                       : "transparent",
                     color: isBallMarked(number) ? "white" : "black",
-                    borderRadius: "50%", // Hace los botones circulares
-                    boxShadow: 1, // Agrega una sombra leve para mejorar la apariencia
+                    borderRadius: "50%",
+                    boxShadow: 1,
                     "&:hover": {
                       backgroundColor: isBallMarked(number)
                         ? "darkgreen"
                         : "lightgray",
                     },
                   }}
-                  onClick={() => handleMarkBall(number)} // Llamada a handleMarkBall
+                  onClick={() => handleMarkBall(number)}
                 >
                   {number}
                 </Button>
@@ -81,7 +121,6 @@ const BingoCard = ({ player, gameId, userId }) => {
         ))}
       </Grid>
 
-      {/* Botón BINGO estilizado */}
       <Box sx={{ marginTop: 3 }}>
         <Button
           variant="contained"
@@ -103,6 +142,34 @@ const BingoCard = ({ player, gameId, userId }) => {
           BINGO
         </Button>
       </Box>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Resultado del Juego</DialogTitle>
+        <DialogContent>
+          <Typography variant="h6" color="text.primary" align="center">
+            {dialogMessage}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cerrar
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

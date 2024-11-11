@@ -117,9 +117,6 @@ const GameDetail = ({ userId }) => {
             drawnBalls={game.drawnBalls}
             handleStartGame={handleStartGame}
           />
-          <Box sx={{ width: "40%" }}>
-            <BingoInstructions />
-          </Box>
         </Box>
       )}
     </Box>
